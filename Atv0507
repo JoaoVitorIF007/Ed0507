@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no{ // criando tipo nó com caracter
+char caracter; // tipo caracter
+struct no * proximo; // criando ponteiro
+}No;
+No* empilhar(No * pilha, char valor){ // retornando no
+No * novo = malloc(sizeof(No)); // alocando memoria para o tipo no EMPILHANDO
+
+if(novo){ // verificando alocacao de memoria
+        novo->caracter = valor; //preenchendo no
+        novo->proximo = pilha;
+        return novo; // retornando no
+}
+else // se nao
+    printf("\tErro ao alocar memoria!\n");
+    return NULL; //retornar nulo
+
+}
+No * desempilhar(No ** pilha){ //retornando o ponteiro
+No * remover; //criando no remover
+
+if(*pilha){ //se for diferente de nulo
+    remover = *pilha; // remover recebe pilha
+    *pilha = remover -> proximo; //pegar o proximo no
+    return remover; // retornando remover
+}
+else // se nao a pilha esta vazia
+    printf("\tIncorreto\n");
+return remover; // retorno remover
+}
+void imprimir(No *pilha){ //imprimindo a pilha
+printf("\tPilha\n");
+while(pilha){ // enquanto for diferente de nulo
+      printf("\t%c\n",pilha->caracter); //
+      pilha = pilha -> proximo; // pilha do inicio ate o final
+      }
+      printf("\tFIM PILHA\n");
+}
+int forma_par(char f, char d){ //carecter de fechamento e desempilhado
+switch(f){ //switch fechamento
+case ')':
+    if(d == '(') //se d for igual a abertura
+        return 1; // bem formada
+    else
+        return 0 ; //mal formada
+break;
+
+  }
+}
+int identifica_formacao(char x[]){ //criando vetor de caracteres
+    int i = 0; //iniciando i com valor 0
+    No * remover, *pilha = NULL; //pilha recebendo nulo
+    while(x[i] != '\0'){ //enquanto x na posicao i for diferente de 0
+        if( x[i] == '(' ){ // se i for a abertura de um parentese
+             pilha = empilhar(pilha, x[i]); //empilhando elemento na pilha
+             imprimir(pilha); //imprimindo pilha
+
+             }
+             else if(x[i] == ')'){ //se x na posicao i for igual a parentese fechado
+                     remover = desempilhar(&pilha); //recebendo retorno de desempilhar
+                     if(forma_par(x[i], remover->caracter) == 0){ //caracter de fechamento e desempilhando pilha, verificando se forma um par
+                     printf("\tEXPRESSAO MAL FORMADA!\n");
+                     return 1; // expressão mal formada
+                     }
+                     free(remover); // liberando no
+             }
+             i++; //incremento para nao da loop
+}
+
+    imprimir(pilha); //imprimindo pilha
+    if(pilha){ //se pilha for diferente de nulo
+        printf("\tEXPRESSAO MAL FORMADA!\n");
+        return 1; //expressao mal formada
+    }
+    else{ // se nao a pilha estara correta
+        printf("\tCORRETO!\n");
+        return 0;
+    }
+}
+
+
+    int main(){
+        char exp[50]; //criando vetor de caracteres com limite
+        printf("\tDigite para verificar os parenteses: ");
+        scanf("%49[^\n]", exp);//até 49 digitos
+        printf("\nExpressao: %s\nRetorno: %d\n", exp,identifica_formacao(exp)); //Vai aparecer para o usuário a expressao e o retorno
+    }
